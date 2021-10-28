@@ -1,0 +1,439 @@
+\chapter{Data Boosting Experiment Results}
+\label{chapter:experiment_results}
+
+\section{Experiments on the original dataset}
+
+The technical implementation that has been described in chapter \ref{chapter:technical_application} has been entirely developed on the titanic dataset described by \cite{titanic}. 
+Therefore the first experiments were also performed on this dataset.
+
+It is important to \textbf{note} here, that due to the fact that this dataset is extremely widely used, there have been significantly higher performances in accuracy achieved.
+These performances are mostly due to extensive feature engineering, since some of the features of the dataset contain implicit information. 
+Take for example the cabin number, which contains information on where the passenger was staying, which would logically have bearing on their odds of survival, if it was mapped to the cabin's
+distance from the deck and/or lifeboats.
+
+This is, however, explicitly \textbf{not} the purpose of this experiment, a notebook that does this fairly well can be found here: \url{https://www.kaggle.com/vinothan/titanic-model-with-90-accuracy} 
+
+The purpose of this experiment, in contrast, is to see whether or not gains in performance can be achieved by simply applying larger compute power to the dataset in an agnostic fashion (more details in the discussion).
+
+\subsection{Experiments with decreased amounts of data}
+
+Initially, the question posed had been whether or not increasing the amount of training data available using a \ac{GAN} could increase neural network performance.
+To examine this in detail, the data was systematically decreased in steps, and neural networks were then trained in parallel 
+
+\begin{itemize}
+	\item on the shrunken data 
+	\item on progressively boosted data
+\end{itemize}
+
+using parameter gridsearch. Gridsearch on neural networks is not yet well automated, therefore in order to do this, some helper modules were created:
+
+\clearpage
+
+\subsubsection{A model creation function}
+
+To ensure that the models that were trained on the shrunken and boosted data partitions, these models had to be created using the same parameters.
+This was done with a simple model creation function that encapsulated all the necessary defaults;
+
+\lstinputlisting[language=Python, basicstyle=\tiny, caption=training loop, label=lst:model_creation_function]{./lst/model_generator_base.py}
+
+The module mostly creates a standard Sequential-class Keras model with minimal dynamic changes (such as BatchNormalization based on the number of layers).
+
+\clearpage
+
+\subsubsection{Sklearn-style Gridsearch} 
+
+Using the KerasClassifier wrapper \url{https://www.tensorflow.org/api_docs/python/tf/keras/wrappers/scikit_learn/KerasClassifier}, a basic gridsearch function was created to be applied to all models.
+
+\lstinputlisting[language=Python, basicstyle=\tiny, caption=gridsearch simplified, label=lst:gridsearch]{./lst/gridsearch_simplified.py}
+
+Note that both the gridsearch and model function are slightly simplified here, the original is again found at \url{https://github.com/PaulBFB/master_thesis/blob/main/nn_gridsearch.py}. 
+
+Also, to quickly apply the gridsearch function to progressively larger segments of the original data, a script \url{https://github.com/PaulBFB/master_thesis/blob/main/boost_experiments.py} was used; 
+which is nothing more than an iteration over the differently resized data parts, applying gridsearch to all of them in order to run in the background (or on remote machines, as some of these tests may take an exceedingly long time, based on the size of the grid and the hardware they run on).
+
+\clearpage
+
+As for the results with decreased data, the following steps were automatically performed: 
+
+\begin{itemize}
+	\item shuffle the data randomly, take a small subset from it
+	\item train a generator on it, either a Wasserstein-GP or DCGAN-adapted style generator
+	\item perform gridsearch on it, from the base model creation function
+	\item record the results
+\end{itemize}
+
+All these steps were performed on a subset of the entire data, the training set, the remaining 20\% of the data, the test set, was only used for evaluation.
+
+Where Gridsearch was applied, a subset of the training data was withheld for Crossvalidation.
+
+The resulting graphic is always formatted in the same way; height of the bar denotes accuracy of the best model, color of the bar denotes the type of boosting that was applied, 
+and the bar position on the x-axis denotes by how much the data was boosted. 
+
+Boosting factor ranges are (somewhat arbitrarily chosen, after multiple experiments):
+
+\begin{itemize}
+	\item +20\%
+	\item +30\%
+	\item +50\%
+	\item +200\%
+	
+\end{itemize}
+
+For clarity, the accuracy of the unboosted data is marked by a line with its' exact value, to clearly denote performance differences.
+
+\clearpage
+
+\subsubsection{Data Size 0.3 - 0.8}
+
+\fig{img/titanic_boosting_experiments_part_1}{Experiment with data sizes 30\%, 40\% of original data}{fig:ex1}{1}
+
+\fig{img/titanic_boosting_experiments_part_2}{Experiment with data sizes 50\%, 60\% of original data}{fig:ex2}{1}
+
+\fig{img/titanic_boosting_experiments_part_3}{Experiment with data sizes 70\%, 80\% of original data}{fig:ex3}{1}
+
+\pagebreak
+
+As can be seen quite plainly, while at some sizes there appears to be a (very very slight) but static gain in performance, 
+the variation is well within the range of simple random fluctuations due to the random grid search performed on the networks and their random initialization.
+
+\clearpage
+
+\subsubsection{Data Size 1}
+
+Performing the same test on the entire data:
+
+\fig{img/titanic_boosting_experiments_part_4}{Experiment with data size 100\% of original data}{fig:ex4}{1}
+
+appears to yield a subtle performance gain, which is not significant either, but seems more consistent.
+
+
+\clearpage
+
+
+\subsubsection{Larger Data Sizes}
+
+Finally, it was tested whether or not boosting the data to a more significant size would deteriorate performance on these standard models - which would stand to reason.
+
+Any patterns in the training data that do not represent the entire dataset well, would be strongly magnified and therefore skew the result, effectively magnifying the model's generalization error.
+
+\fig{img/titanic_boosting_experiments_extreme}{Experiment with data sizes +300\% - +2000\% original data}{fig:ex5}{1}
+
+The format of the experiment remains the same, the only change being that only models trained on the boosted data are recorded here.
+The line representing "unboosted" performance takes its' value from the model that was trained on the entire training set.
+
+\clearpage
+
+While the fluctuation in performance remains on the same scale, which quite probably reflects nothing more than random noise, it seems remarkable here that model performance does not, in fact, degrade.
+
+Elaboration on this is found in the final chapter, it just seems prudent to note here that the aphorism that comes to mind is:
+
+\begin{center} 
+	
+	\textbf{"if you torture the data long enough, it will confess" }
+
+\end{center}
+
+since creating and tuning the entire model architecture and all the helper modules as well as the gridsearch itself was done on the same dataset (so far), to say that this data was tortured is probably quite the understatement.
+
+Therefore, it seemed to be only prudent to use this methodology to test performance on different data sets, as well as its' impact on different types of models.
+
+This accomplished multiple things simultaneously:
+
+\begin{itemize}
+	\item it tested the degree to which fitting the generator and boosting the training data was portable to other small classification datasets
+	\item it tests to what extent the impact on model performance by the boosted data is simply due to an extreme amount of overfitting on the data used so far, as well as information leakage from the training to the test set, due to extensive gridsearch runs.
+\end{itemize}
+
+\clearpage
+
+\section{Different Model Types and Datasets}
+
+In order to compare the impact of this type of boosting on different types of models, a number of standard models were selected from scikit-learn:
+
+\begin{itemize}
+	\item Logistic Regression Classification
+	\item Support Vector Machine Classification
+	\item Decision Tree Classification
+	\item Random Forest Classification
+	\item K-Nearest-Neighbor Classification
+	\item Gaussian Naive Bayes Classification
+	\item Dense Neural Network, for reference
+\end{itemize}
+
+Just a very brief summary of each type of classification (except for neural networks) follows here. All these models were implemented almost exclusively with their \textbf{default values} from scikit-learn version 1.0, where other values were used it is noted explicitly.
+
+As noted before, the very sensible default values in scikit-learn are described also by \cite{buitinck2013api} and have served as guidelines of code implemented here.
+Deep descriptions of these basic models are out of scope of this paper, as they only serve to test and benchmark the performance of the approach for generation of synthetic training data on new datasets.
+
+The relevant documentation is linked in all sections.
+
+\clearpage
+
+\subsubsection{Logistic Regression}
+
+Logistic Regression classification, based on scikit-learn, using a liblinear solver as described by \cite{fan2008liblinear}.
+
+Logistic Regression calculates a log-probability from the input vector for each observation based on a parameter vector $\theta$. 
+The cost function for misclassification of observations is then normalized by a solver, which constitutes a stochastic gradient descent. 
+Therefore, Logistic Regression in this case behaves similarly to a single layer neural network with one neuron per input parameter.
+
+The regularization that was applied (by scikit-learn default) was $\ell_2$ regularization, penalizing parameters.
+
+Documentation can be found here: \url{https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html},
+
+\subsubsection{Support Vector Machine Classification}
+
+\ac{SVC} attempts to formulate a decision boundary around training instances. The goal is to formulate a hyperplane in n-1 dimensional space (where n is the number of attributes in the training data) 
+which maximizes the distance to the nearest training instance. 
+
+Originally formulated by \cite{vapnik1995support} it is a mathematically exceedingly elegant classification solution. In cases where the problem lends itself to projection or dimensionality reduction,
+\acp{SVC} are known to perform very well.
+
+Documentation found here: \url{https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html}.
+ 
+\clearpage
+
+\subsubsection{Random Forest \& Decision Tree Classification}
+
+Decision trees, first described by \cite{quinlan1986induction}, attempt to iteratively bisect the data in a fashion which increases the resulting halves in terms of their "purity".
+Purity in this case is described as how "unbalanced" the classes of the target variable are in the resulting halves, the more unbalanced the better (usually tracked in terms of gini impurity or entropy). 
+
+By recording these split points, decision trees effectively learn how to bisect the data multiple times until all resulting observations are in pure subsets (or alternatively a maximum number of splits or a minimum number of samples has been reached). 
+
+Decision trees are intuitively well understandable by humans, and are robust against outliers and feature scale, 
+but are prone to overfit training data depending on their depth (the amount of times the classifier is allowed to split the data in training).
+
+Documentation can be found here: \url{https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html}
+
+Related to decision trees, \textbf{Random Forect Classifiers} train multiple decision trees on different subsets of attributes of the data and aggregate their results, and constitute a uniquely adaptable and robust ensemble method.
+
+Documentation can be found here: \url{https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html}
+
+\clearpage
+
+\subsubsection{K-Nearest-Neighbor Classification}
+
+\ac{KNN} calculates all distances between training observations based on their attributes in n-dimensional space (where n is the number of attributes in the training data) 
+and classifies each observation by its' K nearest other observations. 
+
+The number of neighbors that is used here is 3, less than the default 5 (in order to be less prone to overfitting the training data).
+
+Documentation can be found here: \url{https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html}
+
+\subsubsection{Gaussian Naive Bayes Classification}
+
+The Naive Bayes Algorithm estimates the probability of a given outcome (survival / death of passengers in this case) given the value of a given attribute; as per Bayes' Theorem of conditional probability.
+
+Here, a key assumption is that all attributes are normally distributed (hence gaussian) and furthermore that the features are all independent of each other (a strong assumption which makes this model fairly brittle in practice, hence naive).
+
+Treating all attributes independently of one another eliminates the requirement of observing all possible permutations of features for all outcomes.
+
+Documentation can be found here: \url{https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html}
+
+\clearpage
+
+\subsection{Reference - model fitting on the titanic dataset}
+
+All these types of models have first been fit on the titanic dataset for reference. 
+
+In order to make these types of models comparable, they have subsequently all been fit on all datasets with the same parameters (as mentioned in the sections) as well as 
+using 80\% of their data as training data, withholding 20\% for performance testing.
+
+All training data have then been used to fit a Wasserstein-GP generator and increase their training data size by 20\% (since this seemed to be the most consistent and promising configuration with the titanic dataset).
+
+For clarity, the baseline for a "naive" prediction (that is, always simply predicting the most common class) is also shown, 
+in order to demonstrate whether any of the models exhibit predictive power beyond simply making the safest guess (i.e. a static model) and are evaluated on their accuracy, since it is a very intuitively understandable metric.
+
+\fig{img/titanic_all_models_boosting_experiments}{Comparing all model type performances on the titanic dataset, training data size boosted by 20\% with Wasserstein-GP generator}{fig:all_titanic}{1}
+
+\pagebreak
+
+The outcome here seems quite consistent, with no change in most models, deterioration of performance does not actually occur, which is promising.
+ 
+Given the fact that this dataset is the one the Wasserstein-GP architecture was built on, any further deductions seem spurious.
+
+\clearpage
+
+\section{Fitting the Generator and models on completely new data}
+
+Two new datasets were selected as test sets for the architecture that was used:
+
+\subsection{The Wine Quality Dataset}
+
+Described by \cite{winequality}. The dataset contains 6000+ observations of wine quality with 11 attributes and one target variable (quality).
+The attributes describe characteristics such as citric acid, chlorides, residual sugar, alcohol etc.
+
+Data preparation steps (using sklearn Pipelines):
+\begin{itemize}
+	\item target variable (quality) changed to binary (any quality over 6 is considered quality wine)
+	\item imputation of median value into columns with missing data ("fixed acidity", "pH", "volatile acidity", "sulphates", "citric acid", "residual sugar", "chlorides", number of missing values <10)
+	\item OneHotEncoding of categorical attribute "wine type"
+	\item MinMaxScaling of numerical attributes
+\end{itemize}
+
+Again, feature engineering of the data was deliberately excluded, just as with the titanic dataset. The steps taken are the bare minimum in order to enable machine learning at all by design.
+As a final note, the dataset used here is fairly unbalanced, roughly 80\% falling into the more common class (low quality wine). More on this in the discussion.
+
+Fitting the Wasserstein-GP model on this data, after preprocessing but without changing any of the default values (layers, number of epochs, architecture, loss function, dynamically building the models from the input shape) yielded the following training log:
+
+\fig{img/generator_wasserstein_wine_quality}{Wasserstein GAN with gradient penalty, 2 layers; left - losses of generator/discriminator right - the probabilities real/fake assigned by the discriminator}{fig:wasserstein_wine}{1}
+
+Encouragingly, the loss for both modules seems to decrease in much the same way as on the original dataset, and the equilibrium denoted by real and generated data clustering together, each at around 0.5 probability by the discriminator seems to hold fairly stable as well, even though the dataset has different size and shape from the original.
+
+Note: details on the training module found here: \ref{subsection:training_loop}
+
+The result of all boosted models, again using default values, analogous to the comparison on the titanic dataset:
+
+\pagebreak
+
+\fig{img/winequality_boosting_experiments.jpg}{Comparing all model type performances, training data size boosted by 20\% with Wasserstein-GP generator}{fig:all_wine}{1}
+
+After the generator was trained on the entire training data (withholding a test set completely to avoid information leakage), in the interest of consistency with the original model, the training data was boosted by 20\%.
+
+Now immediately apparent here seems the fact that most models barely exhibit any predictive power "out of the box" at all - which seems fair, given that there appears to be a rare class problem.
+
+The \ac{nn} seems to be fairly robust against this, even gaining some predictive power from boosting the data. 
+Also, the models with the biggest (negative) impact in performance appear to be the most brittle models, Decision Tree and Naive Bayes. 
+
+Promisingly, the other models (while not gaining performance) appear to barely be affected at all, which seems to indicate that the generated data overall reflects the pattern in the training data.
+
+A more detailed analysis follows in the discussion. The code to create these experiments can be found at \url{https://github.com/PaulBFB/master_thesis/tree/main/notebooks}
+
+\clearpage
+
+\subsection{The Pima Indians Diabetes Dataset}
+\label{subsection:pima}
+
+A dataset originally created by the National Institute of Diabetes and Digestive and Kidney Diseases in order to classify diabetes
+in female patients. 
+
+The dataset includes 8 diagnostic markers:
+\begin{itemize}
+	\item Pregnancies
+	\item Glucose
+	\item BloodPressure
+	\item SkinThickness
+	\item Insulin
+	\item BMI 
+	\item DiabetesPedigreeFunction
+	\item Age	
+\end{itemize}
+
+As well as an outcome column.
+
+Initially described by \cite{diabetes}, classifying diabetes using neural networks.
+
+The dataset is fairly balanced, with around 65\% of outcomes in the more common class, making it fairly similar to the titanic dataset in this regard (63\%, for comparison).
+
+\pagebreak
+
+Data preparation steps (using sklearn Pipelines):
+\begin{itemize}
+	\item Imputation of missing values
+	\item smoothing of extreme outliers (.05 - .95 percentiles)
+	\item MinMaxScaling of numerical attributes
+\end{itemize}
+
+Again, extensive preprocessing or feature engineering was excluded. The steps taken are the bare minimum in order to enable machine learning at all by design. The code to create these experiments can be found at \url{https://github.com/PaulBFB/master_thesis/tree/main/notebooks}
+
+\clearpage
+
+The Wasserstein-GP model was fit automatically on the data, after preprocessing but without changing any of the default values (layers, number of epochs, architecture, loss function, dynamically building the models from the input shape) yielded the following training log:
+
+\fig{img/generator_training_diabetes_n}{Wasserstein GAN with gradient penalty, 2 layers; left - losses of generator/discriminator right - the probabilities real/fake assigned by the discriminator}{fig:wasserstein_diabetes}{1}
+
+
+Once again, even with the data being quite similar to the original dataset the architecture was built on, the components seem to establish an acceptable equilibrium quickly, which also appears to be fairly stable. With more details in the discussion, this seems to point towards the architecture being fundamentally sensible.
+
+After training the generator agnostically i.e. out of the box only using the default values, the training data was boosted by 20\% and the standard models were trained on the data for comparison:
+
+\pagebreak
+
+\fig{img/diabetes_boosting_experiments}{Comparing all model type performances, training data size boosted by 20\% with Wasserstein-GP generator}{fig:all_diabetes}{1}
+
+
+The impact of inserting synthetic data seems to be less pronounced than on the performance of classifiers in the wine quality dataset (\ref{fig:all_wine}) which may be due to the structural similarities between this dataset and the titanic dataset (specifically its' class balance).
+A detailed discussion in the final chapter.
+
+\clearpage
+
+\section{Replacing Training Data with Synthetic Data}
+
+Finally, since it seems pertinent, it was tested what the effect of \textbf{entirely replacing the training data} would have on the performance of models trained on entirely synthetic data.
+
+To test this, the following steps were performed on the titanic, diabetes and wine datasets: 
+
+\begin{itemize}
+	\item splitting the data into training and test data (20\% withheld)
+	\item fitting a a Wasserstein-GP \ac{GAN} on the training data
+	\item completely discarding the real training data and replacing it with synthetic data of identical size
+\end{itemize}
+
+\textbf{Note} that both the attributes of the data as well as the target attribute were replaced with synthetic data.
+
+\clearpage
+
+\subsection{Models on purely synthetic Titanic Data}
+
+\fig{img/titanic_replacing_experiments}{Comparing all model type performances, training data entirely replaced by synthetic data of same size with Wasserstein-GP generator}{fig:replacing_titanic}{.6}
+
+Obviously, the effect on model performance is fairly stark. 
+
+As a note, the line represents a static model, always predicting the most common class in the training data. Given, some models seem to preserve a small amount of predictive power above purely guessing, but this is negligible. 
+
+\pagebreak
+
+\subsection{Models on purely synthetic Wine Data}
+
+
+\fig{img/winequality_replacing_experiments}{Comparing all model type performances, training data entirely replaced by synthetic data of same size with Wasserstein-GP generator}{fig:replacing_wine}{.6}
+
+Quite similarly to the titanic dataset, the effect on predictive power is devastating. Given that the models all barely outperformed a naive majority classifier this is fairly disappointing. 
+
+Interesting to note here seems to be the marked symmetry between model classes trained on the original data and the replaced data. Also, the fact that all models created would actually perform better if they were to be inverted is almost an achievement; dubiously epitomized by the decision tree classifier.
+
+Maybe the fact that the training log of the Wasserstein-GP model (shown here \ref{fig:wasserstein_wine}) appears to show a slight drift out of equilibrium in the later epochs is a contributing factor to this effect.
+
+\pagebreak
+
+\subsection{Models on purely synthetic Diabetes Data}
+
+\fig{img/diabetes_replacing_experiments}{Comparing all model type performances, training data entirely replaced by synthetic data of same size with Wasserstein-GP generator}{fig:all_replaced_diabetes}{.6}
+
+The analogous experiments were performed with the diabetes dataset, and while the performance decreases markedly, it does so substantially less so than in relation to the wine dataset. 
+
+It stands to reason that this hints at a fundamentally better fit of the Wasserstein-GP architecture chosen to the diabetes dataset, probably due to its' structural similarity to the titanic dataset.
+
+\pagebreak
+
+\subsection{Replacement Conclusions}
+
+Two interesting notes here, firstly the model class that preserves the most predictive power is the Random Forest Classifier, which given the fact that it constitutes an ensemble model is not overly surprising. 
+
+Secondly, the stark drop in performance of the \ac{nn} is - in part - due to the fact how it is trained;
+
+In lieu of more traditional regularization techniques, the model uses keras's EarlyStopping Callback \url{https://keras.io/api/callbacks/early_stopping/} which monitors a key metric and stops the training if the model does not improve for a set number of epochs. 
+In the case of the model used here, the metric used for stopping was the validation loss, calculated on a subset of the training data during the epoch (20\%, randomly chosen).
+
+\pagebreak
+
+The code for the sample neural network:
+
+\lstinputlisting[language=Python, basicstyle=\tiny, caption=base model, label=lst:nn_experiments]{./lst/model_sample_experiments.py}
+
+Listing~\ref{lst:nn_experiments} shows the python function which creates the base neural network used in all experiments.
+
+While this is beneficial in a standard sequential model, if the trained data is not representing all data closely enough,
+this drift will be greatly magnified. 
+
+\pagebreak
+
+Taking a look at the training log (taken from TensorBoard) seems to confirm this:
+
+\fig{img/epoch_accuracy_n.png}{model accuracy history during training; data entirely replaced by synthetic data of same size with Wasserstein-GP generator}{fig:training_logs_tensorboard}{1}
+
+So it would seem from this training log that the accuracy recorded during training quickly increases above 90\%. 
+
+As a side note, with the titanic dataset the generalization error, that is the difference between validation accuracy calculated on the withheld subset of training data in each epoch and accuracy on the test set was always around 3-4 percentage points.
+
+Ultimately, if the synthetic data \textbf{were} to be representative of the test data, an accuracy of this magnitude with the same architecture would not be possible. It seems likely then, that the network trained here is actually learning some of the patterns that the generator uses to create new data from the random distribution in its' latent space.

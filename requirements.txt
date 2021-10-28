@@ -1,0 +1,13 @@
+h5py==3.1.0
+incremental==21.3.0
+matplotlib==3.4.1
+numpy==1.21.2
+pandas==1.2.3
+progress==1.5
+scikit-learn==1.0
+scipy==1.6.2
+seaborn==0.11.2
+tensorboard==2.6.0
+tensorflow==2.6
+tensorflow-datasets==4.4.0
+validate==5.1.0.dev0
