@@ -1,1 +1,25 @@
-\chapter{first AI winter}
+\chapter{AI Winters and Resurgence}
+
+\section{First AI Winter}
+
+Arguably, the initial enthusiasm for his early results had led Rosenblatt to overpromise. 
+
+Together with Minsky and Paperts book, \cite{minsky}, "Artificial Intelligence: a general Survey" published in 1973 by James Lighthill, \cite{lighthill1973artificial}, colloquially known as the Lighthill Report, caused public opinion on the field of Artificial Intelligence and its' outlook to drastically swing into the opposite direction.
+
+Ultimately the Lighthill Report bemoaned the practically nonexistent results in the field in contrast with the sums invested. At the heart of the issue seemed to be, at the time, the "combinatorial explosion".
+
+Framing multilayer perceptrons as a \textbf{search space} of all possible ideal weights and biases - each perceptron having a number of weights equal to their number of inputs, as seen in \ref{fig:perceptron} - combinatorial explosion refers to the problem that search time in such spaces increases exponentially with the number of parameters. 
+
+In the following years, research into the topic quickly dried up.
+
+\section{Brief revival and Second AI Winter}
+
+For a few years there was renewed interest in \ac{AI} due to the advent of \textit{expert systems}, which were not neural networks in any sense, but knowledge hardcoded by experts, constituting (very) large if-then loops (hence the name). 
+
+Therefore funding, especially by DARPA dried up quickly again by the end of the 1980s.
+
+Meanwhile, without much fanfare, after a few years of almost completely nonexistent funding of AI projects, a previously missing piece of the puzzle was discovered - twice.
+
+Both \cite{backprop} and \cite{backprop_werbos} independently described a method for propagating errors back trough a network of layered perceptrons. Thereby, the algorithm to train deep networks was in place.
+
+Ultimately, even though the theoretical groundwork had been mostly laid, \ac{AI} lay dormant for almost 3 decades.

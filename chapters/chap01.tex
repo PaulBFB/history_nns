@@ -1,8 +1,8 @@
-\chapter{Beginnings}
+\chapter{Beginnings and Foundational Theory}
 
 \section{Introduction}
 
-Today, artificial neural networks are a central building block of the machine learning landscape and are assumed to hold the biggest promise for the budding advent of true artificial intelligence. Neural Networks are integral to a wide array of applications as of the writing of this paper, such as image recognition, voice assistants, natural language processing and more. While debates over the safety and the implications of the looming AI singularity are entering the popular dialogue, most potential applications have not yet reached application in business as of yet.
+Today, artificial neural networks are a central building block of the machine learning landscape and are assumed to hold the biggest promise for the budding advent of true artificial intelligence. Neural Networks are integral to a wide array of applications as of the writing of this paper, such as image recognition, voice assistants, natural language processing and more. While debates over the safety and the implications of the looming \ac{AI} singularity are entering the popular dialogue, most potential applications have not yet reached application in business as of yet.
 
 
 
@@ -14,8 +14,46 @@ While in 335 BC Greek philosopher Aristotle assumed the brain to be a cooling me
 
 These from today's standpoint rather cartoonish conceptions of the nervous system gave way to the first indication that electricity played a part when in 1791 Luigi Galvani showed with his famous demonstrations of amphibian limbs that nerves carried electrical impulses from the brain. 
 
-In 1906 the Nobel Prize in Physiology or Medicine was awarded to Camillo Golgi and Santiago Ramon y Cajal, \cite{golgi}, for their description of neurons as the building blocks of the brain.
+In 1906 the Nobel Prize in Physiology or Medicine was awarded to Camillo Golgi and Santiago Ramon y Cajal, \cite{golgi}, for their description of neurons as the building blocks of the brain. Thus the groundwork from the biological side had been laid.
 
-\section{Mathematical modelling of neurons}
+Concerning the mathematical and engineering side, Charles Babbage's' \textit{Analytical Engine}, \cite{babbage}, a steam-powered mechanical general purpose computation machine (which was sadly never completed) was recognized by the 19th century Mathematician Ada Lovelace as revolutionary. She writes:
 
+\begin{center}
+	\textit{“The Analytical Machine does not occupy common ground with mere ‘calculating machines.’ It holds a position wholly it's own, and the considerations it suggests are more interesting in their nature […] we mean any process which alters the mutual relation of two or more things, be this relation of what kind it may. This is the most general definition, and would include all subjects in the universe.”}
+\end{center}
 
+Alluding to what we would today call \textit{turing complete}. However, and probably most importantly, Lady Lovelace already foresaw the question that anticipated the question of artificial intelligence (by almost a century) she further notes:
+
+\begin{center}
+	\textit{““The Analytical Engine has no pretensions to originate anything. It can do whatever we know how to order it to perform.”}
+\end{center}
+
+i.e. a system may only do what it has been explicitly programmed to do, and not \textit{create}. Due to the fact that the first general purpose computer would not be built for several decades, her ideas would remain in the realm of (albeit stunningly brilliant and prescient) theory.
+
+\section{mid 20th century, Mathematical modeling of neurons and the Perceptron}
+
+\subsection{McCulloch, Pitts and Turing}
+
+The first intersection between biological understanding of the brain and logical/mathematical theory arrived when Warren McCulloch and Walter Pitts proposed that the connections between neurons actually constituted a "logical calculus" in 1943 \cite{mcculloch1943logical}, which could approximate functions. 
+
+\fig{img/mcculloch}{from \cite{mcculloch1943logical}}{fig:mcculloch_neurons}{1}
+
+In their conclusion, \cite{mcculloch1943logical} even allude to the future possibility of understanding of the mind from nervous structure and claim that therefore \textit{"in such systems, 'Mind' no longer 'goes more ghostly than a ghost'"}.
+
+\pagebreak
+
+In 1950, meanwhile, Alan Turing argued in his essay "Computing Machinery and Intelligence" that machines in fact could think, and after having stumbled on Babbage and Lovelace's notes, he famously addressed the latter's point in his section on contrary views as \textbf{Lady Lovelace's Objection}. In this section, Turing argues that original work produced by humans may merely be due to "a seed planted" in them by learning, and furthermore creative acts may be more sensibly construed as "machines taking us by surprise" which they often do \cite{turing1950mind} - the whole essay is really quite well-written, and broader awareness of Turing's arguments would go a long way towards improving our present debate about artificial intelligence and its' challenges.
+
+\subsection{Rosenblatt, Minsky and Papert}
+
+Several years later, in 1958, the psychologist Frank Rosenblatt, inspired by \cite{hebb1949organisation} and the famous adage derived from his book, "the Organization of Behavior", \textit{neurons that fire together, wire together} proposed the \textbf{Perceptron} in his paper \cite{rosenblatt1958perceptron}, the basic building block as it is used in neural networks today:
+
+\fig{img/perceptron}{Perceptron Schematic, from wikipedia}{fig:perceptron}{1}
+
+as shown here, Rosenblatt's perceptron already exhibited all the hallmarks of modern units of neural networks, multiple inputs coming in with attendant weights, a bias term, summing inputs with the bias and an \textbf{activation threshold} which decides whether or not the perceptron "fires" and an output.
+
+Rosenblatt showed that he was able to train perceptrons and perform classification, which garnered a large amount of interest. However, the perceptron proved fairly "brittle" in practice and when \cite{minsky} showed in their book on perceptrons "Perceptrons: an introduction to computational geometry" that they were unable to emulate a logical XOR gate. A XOR gate, or exclusive or, is a logic gate which returns TRUE if either of the inputs evaluates to TRUE, but not both - it had been an important litmus test in nonlinear classification. 
+
+While multiple layers of Perceptrons \textit{were} able to emulate a XOR logic gate, there was no algorithm to train multiple layers of perceptrons.
+
+Arguably Minsky and Papert triggered what is now commonly known as the \textbf{first \ac{AI} winter}.

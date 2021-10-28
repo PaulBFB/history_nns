@@ -1,1 +1,26 @@
-\chapter{recent explosion}
+\chapter{Revival and Recent Explosion}
+
+In 2007 \cite{hinton2009deep} published his paper on "Deep Belief Networks"; a layered composite model that was used in image recognition. 
+However, the approach still suffered from several limitations. Firstly, using Hinton's method of backpropagation was promising, but the deep belief nets at the time still suffered from what is known as "vanishing gradients". The error that was backpropagated through the network to adjust all parameters grew vanishingly small after propagation through multiple layers - due to the fact that backpropagation involved multiple multiplications by numbers between 0 and 1.
+
+This was due to the fact that backpropagation builds a partial derivative of the loss function with regard to each weight, which was in relation to the slope of the activation function. The most popular activation function at the time, the \textit{sigmoid} activation function, has a gradient approaching 0 at large and small values. This leads to vanishing gradients, or saturated activation functions.
+
+At the time it was standard procedure, therefore, to pre-train lower layers of the network separately, in order adjust their weights.
+
+In 2010 \cite{glorot2010understanding} proposed a new initialization function for weights, a normalized random activation, henceforth the de-facto standard known as glorot-initialization (which is still used by default in packages like keras). This initialization, with the advent of new activation functions such as the hyperbolic tangent activation function, significantly ameliorated the problem of saturation.
+
+Finally in 2012, two more important pieces emerged to kick off the recent explosion off deep learning, which is still ongoing. 
+
+\textit{Dropout} which randomly deactivates a number of neurons of a neural network layer during training in order to make sure training signals "saturate" each region and that neurons do not overfit each other's signals too closely as described by \cite{dropout} (thereby making neural networks much more robust).
+
+Secondly, \textit{RMSPropagation} as described by \cite{RMSPROP}, in which batches are split into smaller mini batches and adjust the change in weights based on the root mean square (hence RMS) of the batch, thereby enabling smaller batches of very large datasets being used. 
+
+As soon as these pieces were in place, a veritable cambrian explosion of deep learning improvements and technologies followed soon after, the most important of which are:
+
+\begin{itemize}
+	\item BatchNormalization
+	\item Wide \& Deep learning Recommender Systems
+	\item Generative Adversarial Networks 
+	\item Monte-Carlo Dropout
+	\item Word Embeddings for natural language understanding
+\end{itemize}
