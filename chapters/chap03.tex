@@ -11,15 +11,15 @@ In 2010 \cite{glorot2010understanding} proposed a new initialization function fo
 
 Finally in 2012, two more important pieces emerged to kick off the recent explosion off deep learning, which is still ongoing. 
 
-\textit{Dropout} which randomly deactivates a number of neurons of a neural network layer during training in order to make sure training signals "saturate" each region and that neurons do not overfit each other's signals too closely as described by \cite{dropout} (thereby making neural networks much more robust).
+\textit{Dropout} which randomly deactivates a number of neurons of a neural network layer during training in order to make sure training signals "saturate" each region and that neurons do not overfit each other's signals too closely as described by \cite{dropout} (thereby making neural networks much more robust and reduce their generalization error).
 
 Secondly, \textit{RMSPropagation} as described by \cite{RMSPROP}, in which batches are split into smaller mini batches and adjust the change in weights based on the root mean square (hence RMS) of the batch, thereby enabling smaller batches of very large datasets being used. 
 
-As soon as these pieces were in place, a veritable cambrian explosion of deep learning improvements and both development of new technologies as well as recent applications for established research followed soon after, the most important of which are:
+As soon as these pieces were in place, a veritable cambrian explosion of deep learning followed. Both new improvements to the approach were developed and applications of established research followed, some the most important of which are:
 
 \begin{itemize}
 	\item BatchNormalization - \cite{ioffe2015batch}
-	\item Wide \& Deep learning Recommender Systems - \cite{cheng2016wide}
+	\item Wide \& Deep learning for Recommender Systems - \cite{cheng2016wide}
 	\item Generative Adversarial Networks - \cite{goodfellow2014generative}
 	\item Monte-Carlo Dropout - \cite{gal2016dropout}
 	\item Word Embeddings for natural language understanding - \cite{mikolov2013distributed}
@@ -27,14 +27,18 @@ As soon as these pieces were in place, a veritable cambrian explosion of deep le
 	\item Convolution and Max Pooling used in Neural Networks for computer vision - \cite{378228}
 \end{itemize}
 
-The advances of 2012 have kicked off a veritable tsunami of research and development of neural networks and the field itself is still very much in flux. Arguably, only a very small percentage of these advances have, in turn, as of yet found their way into application in business and public sectors at all.
+The advances since 2012 have kicked off a veritable tsunami of research and development of neural networks and the field itself is still very much in flux. Arguably, only a very small percentage of these advances have, in turn, as of yet found their way into application in business and public sectors at all - undoubtedly, many of these improvements will find their business models and will therefore be applied more broadly in various industries.
 
-As for the ever-elusive promise of \textbf{true} artificial intelligence, or artificial general intelligence as it is now referred to - while some researchers and public intellectuals such as Sam Harris have been very vocals about the risk of the impending "singularity" and its' attendant risks, others like \cite{thousand} in his book "a thousand brains" argue that while \ac{AI} is coming, it is not cause for alarm while Geoff Hinton himself apparently stated that deep networks alone may not be enough for true \ac{AI} and we need to look towards other ways than backpropagation such as reinforcement learning, transfer learning, genetic algorithms, one-shot learning and other approaches.
+As for the ever-elusive promise of \textbf{true} artificial intelligence, or artificial general intelligence as it is now referred to - some researchers and public intellectuals such as Sam Harris have been very vocal about the risks of the race towards \ac{AI} which, as they argue, have fallen by the wayside. A good summary of this is his interview with Stuart Russel, co-author of "Artifitial Intelligence, a modern approach" here: \url{https://samharris.org/podcasts/the-dawn-of-artificial-intelligence1/}. 
 
-In his recent interview (\url{https://lexfridman.com/peter-norvig/}) with Lex Fridman, Peter Norvig (author of "Artificial Intelligence: A modern Approach" together with Steward Russel and others, \cite{russell2002artificial} ) contrasted the more "probabilistic" approach modeled in deep learning to expert systems based on booleans and binary logic employed in expert systems and noted that for true \ac{AI} a synthesis would probably be necessary.
+Others like \cite{thousand} in his book "a thousand brains" argue that while \ac{AI} is coming, it is not cause for alarm, simply because the analogy towards the brain does not completely hold. 
+
+While Geoffrey Hinton himself apparently stated that deep networks alone may not be enough for true \ac{AI} and we need to look towards other ways than backpropagation such as reinforcement learning, transfer learning, genetic algorithms, one-shot learning and other approaches.
+
+In his recent interview with Lex Fridman (\url{https://lexfridman.com/peter-norvig/}), Peter Norvig (himself co-author of "Artificial Intelligence: A modern Approach" together with Steward Russel and others, \cite{russell2002artificial} ) contrasted the more "probabilistic" approach modeled in deep learning to expert systems based on booleans and binary logic employed in expert systems and noted that for true \ac{AI} a synthesis of the two would probably be necessary.
 
 Similarly, Ian Goodfellow (creator of \acp{GAN}) pointed out that while especially \ac{LSTM} provided something like an internal representation of "knowledge" in a \ac{nn}, effectively propagating forward the signal as it is done in the \ac{LSTM} approach does not actually model short-term memory as it is defined in the brain - he therefore also noted that \acp{nn} would have to interact with or completely incorporate a knowledge base in some way (interview found here: \url{https://lexfridman.com/ian-goodfellow/}).
 
 While some very promising results have been achieved in steps relating to perception and multi-step processing of multidimensional data in \acp{nn}, the search for true \ac{AI} seems to be missing some fundamental ingredients. Maybe even in the practical application of a theoretically explored approach from decades ago that is simply waiting for its' revival.
 
-It may therefore be taken for granted that the field itself will remain dynamic and vibrant for years to come, even though another \ac{AI} winter is not out of the realm of possibility.
+It may therefore be taken for granted that the field itself will remain dynamic and vibrant for years to come, even though another \ac{AI} winter is not out of the realm of possibility - see \cite{schuchmann2019analyzing}.

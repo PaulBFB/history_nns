@@ -2,17 +2,21 @@
 
 \section{Introduction}
 
-Today, artificial neural networks are a central building block of the machine learning landscape and are assumed to hold the biggest promise for the budding advent of true artificial intelligence. Neural Networks are integral to a wide array of applications as of the writing of this paper, such as image recognition, voice assistants, natural language processing and more. While debates over the safety and the implications of the looming \ac{AI} singularity are entering the popular dialogue, most potential applications have not yet reached application in business as of yet.
+Today, artificial neural networks are a central building block of the machine learning landscape and are assumed to hold the biggest promise for the budding advent of true \ac{AI}. 
 
+Already, Neural Networks are integral to a wide array of applications as of the writing of this paper, such as image recognition, voice assistants, natural language processing and more. 
 
+While debates over the safety and the implications of the looming \ac{AI} singularity are entering the popular dialogue, most potential applications have not yet reached application in business as of yet.
 
 Throughout the history of science, the inner workings of the human mind had been modeled along the most current understanding of outwardly applied science and engineering principles.
+
+\pagebreak
 
 \section{predating 1900}
 
 While in 335 BC Greek philosopher Aristotle assumed the brain to be a cooling mechanism for the blood with the seat of intelligence being the heart, the physician Galen posed in his \textit{balloonist theory} that nerves carried fluid as a signal and inflated muscles like balloons.
 
-These from today's standpoint rather cartoonish conceptions of the nervous system gave way to the first indication that electricity played a part when in 1791 Luigi Galvani showed with his famous demonstrations of amphibian limbs that nerves carried electrical impulses from the brain. 
+These from today's standpoint rather cartoonish conceptions of the nervous system gave way to the first indication that electricity played a part when in 1791 Luigi Galvani showed - with his famous demonstrations of severed twitching amphibian limbs - that nerves carried electrical impulses from the brain. 
 
 In 1906 the Nobel Prize in Physiology or Medicine was awarded to Camillo Golgi and Santiago Ramon y Cajal, \cite{golgi}, for their description of neurons as the building blocks of the brain. Thus the groundwork from the biological side had been laid.
 
@@ -22,13 +26,21 @@ Concerning the mathematical and engineering side, Charles Babbage's' \textit{Ana
 	\textit{“The Analytical Machine does not occupy common ground with mere ‘calculating machines.’ It holds a position wholly it's own, and the considerations it suggests are more interesting in their nature […] we mean any process which alters the mutual relation of two or more things, be this relation of what kind it may. This is the most general definition, and would include all subjects in the universe.”}
 \end{center}
 
-Alluding to what we would today call \textit{turing complete}. However, and probably most importantly, Lady Lovelace already foresaw the question that anticipated the question of artificial intelligence (by almost a century) she further notes:
+\pagebreak
+
+Alluding to what we would today call \textit{turing complete}. However, and probably most importantly, Lady Lovelace already foresaw the question that anticipated the question of artificial intelligence (by almost a century): can machines \textbf{can machines think and create?}. 
+
+On this point she notes:
 
 \begin{center}
 	\textit{““The Analytical Engine has no pretensions to originate anything. It can do whatever we know how to order it to perform.”}
 \end{center}
 
-i.e. a system may only do what it has been explicitly programmed to do, and not \textit{create}. Due to the fact that the first general purpose computer would not be built for several decades, her ideas would remain in the realm of (albeit stunningly brilliant and prescient) theory.
+i.e. a system may only do what it has been explicitly programmed to do, and not \textit{create}. Due to the fact that the first general purpose computer would not be built for several decades, her ideas would remain in the realm of (albeit stunningly brilliant and prescient) theory. 
+
+"Only" foreseeing computation and turing completeness and yet missing the implication of non-human creativity arising from emergent complexity as we see it today in applications such as \acp{GAN} (to be touched upon in the final part) can arguably be forgiven.
+
+\pagebreak
 
 \section{mid 20th century, Mathematical modeling of neurons and the Perceptron}
 
@@ -42,7 +54,13 @@ In their conclusion, \cite{mcculloch1943logical} even allude to the future possi
 
 \pagebreak
 
-In 1950, meanwhile, Alan Turing argued in his essay "Computing Machinery and Intelligence" that machines in fact could think, and after having stumbled on Babbage and Lovelace's notes, he famously addressed the latter's point in his section on contrary views as \textbf{Lady Lovelace's Objection}. In this section, Turing argues that original work produced by humans may merely be due to "a seed planted" in them by learning, and furthermore creative acts may be more sensibly construed as "machines taking us by surprise" which they often do \cite{turing1950mind} - the whole essay is really quite well-written, and broader awareness of Turing's arguments would go a long way towards improving our present debate about artificial intelligence and its' challenges.
+In 1950, meanwhile, Alan Turing argued in his essay "Computing Machinery and Intelligence" that machines in fact could think, and after having stumbled on Babbage and Lovelace's notes, he famously addressed the latter's point in his section on contrary views as \textbf{Lady Lovelace's Objection}. 
+
+In this section, Turing argues that original work produced by humans may merely be due to "a seed planted" in them by learning, and furthermore creative acts may be more sensibly construed as "machines taking us by surprise" which they often do \cite{turing1950mind} - the whole essay is really quite well-written, and broader awareness of Turing's arguments would go a long way towards improving our present debate about artificial intelligence and its' challenges.
+
+Importantly however, Turing remarked that Babbage and Lovelace "had not claimed all that they could claim, nor had they reason to" - implying, I think, that they may well have foreseen that machines could create "surprising" (as he termed it) outputs, yet that these did not necessarily constitute true creativity, making their objection a more semantic difference.
+
+\pagebreak
 
 \subsection{Rosenblatt, Minsky and Papert}
 
@@ -52,8 +70,20 @@ Several years later, in 1958, the psychologist Frank Rosenblatt, inspired by \ci
 
 as shown here, Rosenblatt's perceptron already exhibited all the hallmarks of modern units of neural networks, multiple inputs coming in with attendant weights, a bias term, summing inputs with the bias and an \textbf{activation threshold} which decides whether or not the perceptron "fires" and an output.
 
-Rosenblatt showed that he was able to train perceptrons and perform classification, which garnered a large amount of interest. However, the perceptron proved fairly "brittle" in practice and when \cite{minsky} showed in their book on perceptrons "Perceptrons: an introduction to computational geometry" that they were unable to emulate a logical XOR gate. A XOR gate, or exclusive or, is a logic gate which returns TRUE if either of the inputs evaluates to TRUE, but not both - it had been an important litmus test in nonlinear classification. 
+\pagebreak
 
-While multiple layers of Perceptrons \textit{were} able to emulate a XOR logic gate, there was no algorithm to train multiple layers of perceptrons.
+Rosenblatt showed that he was able to train perceptrons and perform classification, which garnered a large amount of interest. Specifically, his early successes in training perceptrons to perform classification using his initial training algorithm:
+
+\fig{img/rosenblatt_training_algorithm}{from \cite{rosenblatt1958perceptron}}{fig:mcculloch_neurons}{1}
+
+which started the first \ac{AI} boom.
+
+However, the perceptron proved fairly "brittle" in practice and when \cite{minsky} showed in their book on perceptrons "Perceptrons: an introduction to computational geometry" that they were unable to emulate a logical XOR gate (in practice, see below). 
+
+\pagebreak
+
+A XOR gate, or exclusive or, is a logic gate which returns TRUE if either of the inputs evaluates to TRUE, but not both - it had been an important litmus test in nonlinear classification. 
+
+Importantly, while multiple layers of Perceptrons \textbf{were} able to emulate a XOR logic gate, there was no algorithm to train multiple layers of perceptrons.
 
 Arguably Minsky and Papert triggered what is now commonly known as the \textbf{first \ac{AI} winter}.
