@@ -1,5 +1,5 @@
 # Brief History of Neural Networks
-> written by Paul Leitner, for the course "Kolloquium zur Masterarbeit" at University of applied Sciences, Kufstein"
+> written by Paul Leitner, for the course "Kolloquium zur Masterarbeit" at University of applied Sciences, Kufstein
 
 ## Main Document
 
